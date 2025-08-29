@@ -1,14 +1,26 @@
+version: '3.8'
+
 services:
-  worker:
-    build: .
+  ultroid-app:
+    image: ghcr.io/4801f421/ultroid:latest
+    container_name: ultroid-app
+    restart: unless-stopped
+    env_file:
+      - .env
     environment:
-      REDIS_URI: $REDIS_URI
-      REDIS_PASSWORD: $REDIS_PASSWORD
-      SESSION: $SESSION
-      API_ID: $API_ID  # defaults to None
-      API_HASH: $API_HASH  # defaults to None
-      MONGO_URI: $MONGO_URI  # defaults to None
-      BOT_TOKEN: $BOT_TOKEN # Not mandatory
-      LOG_CHANNEL: $LOG_CHANNEL # Not mandatory
-      DATABASE_URL: $DATABASE_URL  # defaults to None
-      OKTETO_TOKEN: $OKTETO_TOKEN
+      - REDIS_URI=ultroid-db
+    depends_on:
+      - ultroid-db
+    volumes:
+      - ./session:/root/TeamUltroid/session
+
+  ultroid-db:
+    image: redis:6.2-alpine
+    container_name: ultroid-db
+    restart: unless-stopped
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data:

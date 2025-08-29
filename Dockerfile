@@ -1,20 +1,18 @@
-# Ultroid - UserBot
-# Copyright (C) 2021-2025 TeamUltroid
-# This file is a part of < https://github.com/TeamUltroid/Ultroid/ >
-# PLease read the GNU Affero General Public License in <https://www.github.com/TeamUltroid/Ultroid/blob/main/LICENSE/>.
+# 1. Base Image
+FROM python:3.9-slim
 
-FROM theteamultroid/ultroid:main
+# 2. Set Environment Variables
+ENV TZ=Asia/Tehran
 
-# set timezone
-ENV TZ=Asia/Kolkata
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# 3. Install system dependencies
+RUN apt-get update &&     apt-get install -y --no-install-recommends     git     ffmpeg     mediainfo     neofetch     && rm -rf /var/lib/apt/lists/*
 
-COPY installer.sh .
+# 4. Copy project files
+WORKDIR /root/TeamUltroid
+COPY . .
 
-RUN bash installer.sh
+# 5. Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt &&     pip install --no-cache-dir -r resources/startup/optional-requirements.txt &&     pip install --no-cache-dir redis hiredis
 
-# changing workdir
-WORKDIR "/root/TeamUltroid"
-
-# start the bot.
+# 6. Set the entrypoint
 CMD ["bash", "startup"]
