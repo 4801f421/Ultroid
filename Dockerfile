@@ -5,7 +5,7 @@ FROM python:3.13-slim
 ENV TZ=Asia/Tehran
 
 # 3. Install system dependencies
-RUN apt-get update &&     apt-get install -y --no-install-recommends     git     ffmpeg     mediainfo     neofetch     && rm -rf /var/lib/apt/lists/*
+RUN sed -i 's/Components: main/Components: main contrib/' /etc/apt/sources.list.d/debian.sources &&     apt-get update &&     apt-get install -y --no-install-recommends     git     ffmpeg     mediainfo     neofetch     && rm -rf /var/lib/apt/lists/*
 
 # 4. Set workdir
 WORKDIR /root/TeamUltroid
