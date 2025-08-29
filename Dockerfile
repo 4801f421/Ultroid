@@ -5,7 +5,7 @@ FROM python:3.13-slim
 ENV TZ=Asia/Tehran
 
 # 3. Install system dependencies
-RUN apt-get update &&     apt-get install -y --no-install-recommends     git     ffmpeg     mediainfo     && rm -rf /var/lib/apt/lists/*
+RUN apt-get update &&     apt-get install -y --no-install-recommends     git     ffmpeg     mediainfo     build-essential     && rm -rf /var/lib/apt/lists/*
 
 # 4. Set workdir
 WORKDIR /root/TeamUltroid
